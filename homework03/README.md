@@ -34,5 +34,5 @@ The script outputs the average turbidity based on the most recent five measureme
 Example Output:
 
 Average turbidity based on most recent five measurements = 1.2000 NTU
-Turbidity is below threshold for safe use
-Minimum time required to return below a safe threshold = 30658.95 hours
+Info: Turbidity is below threshold for safe use
+Minimum time required to return below a safe threshold = 0 hours
