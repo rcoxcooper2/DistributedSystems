@@ -38,13 +38,13 @@ with open('homework03/turbidity_data.json', 'r') as file:
 turbidity_data = data.get('turbidity_data', [])
 
 # Extract the most recent five data points
-recent_data = turbidity_data[-5:]
+last_five = turbidity_data[-5:]
 
 # Calculate the average turbidity from the most recent five data points
-average_turbidity = sum(entry['sample_volume'] for entry in recent_data) / len(recent_data)
+average_turbidity = sum(entry['sample_volume'] for entry in last_five) / len(last_five)
 
 # Check if average turbidity is below the safe threshold
-turbidity_threshold = 1.5  # Example threshold, you should replace it with your actual threshold
+turbidity_threshold = 1.5 
 is_below_threshold = average_turbidity < turbidity_threshold
 
 # Print the average turbidity and whether it is below the safe threshold
@@ -55,8 +55,8 @@ else:
     print("Info: urbidity is above threshold for safe use")
 
 # Calculate the minimum time required to fall below the safe threshold
-current_time = datetime.strptime(recent_data[-1]['datetime'], "%Y-%m-%d %H:%M")
-current_turbidity = recent_data[-1]['sample_volume']
+current_time = datetime.strptime(last_five[-1]['datetime'], "%Y-%m-%d %H:%M")
+current_turbidity = last_five[-1]['sample_volume']
 decay_factor = 0.02 
 min_time_to_threshold = calculate_minimum_time(turbidity_threshold, current_turbidity, decay_factor)
 
