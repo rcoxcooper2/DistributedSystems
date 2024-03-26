@@ -8,21 +8,7 @@ app = Flask(__name__)
 positional_data = None
 sighting_data = None
 
-# Load positional data from XML file to string
-'''@app.route('/load_positional_data', methods=['POST'])
-def load_positional_data():
-    global positional_data
-    try:
-        with open('positional.xml', 'r') as f:
-            positional_data = f.read()  # Read XML data as string
-            # Print out a sample of the loaded data
-            print(positional_data)  # Print first 100 characters as a sample
-        app.logger.info('Positional data loaded successfully')
-        return jsonify({'message': 'Positional data loaded successfully'})
-    except Exception as e:
-        app.logger.error(f'Error loading positional data: {e}')
-        return jsonify({'message': 'Error loading positional data'})
-'''
+
 #To dict
 # Load positional data from XML file
 @app.route('/load_positional_data', methods=['POST'])
@@ -70,20 +56,6 @@ def instructions():
         }
     })
 
-# Get all epochs in the positional data
-'''@app.route('/positional_data/epochs', methods=['GET'])
-def get_all_epochs():
-    global positional_data
-    print("Sample positional data:", positional_data)  # Print a sample of positional data
-
-    if positional_data:
-        root = ET.fromstring(positional_data)
-        epochs = [state_vector.find('EPOCH').text for state_vector in root.findall('.//stateVector')]
-        return jsonify({'epochs': epochs})
-    else:
-        return jsonify({'message': 'No positional data loaded'})
-'''
-# Get all epochs in the positional data
 # Get all epochs in the positional data
 @app.route('/positional_data/epochs', methods=['GET'])
 def get_all_epochs():
