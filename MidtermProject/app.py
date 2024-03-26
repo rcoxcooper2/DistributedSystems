@@ -109,9 +109,6 @@ def get_epoch_info(epoch):
     else:
         return jsonify({'message': 'No positional data loaded'})
 
-
-
-
 # Get all countries from the sighting data
 @app.route('/sighting_data/countries', methods=['GET'])
 def get_all_countries():
@@ -123,8 +120,6 @@ def get_all_countries():
         return jsonify({'countries': list(countries)})
     else:
         return jsonify({'message': 'No sighting data loaded'})
-
-
 
 # Get information about a specific country in the sighting data
 @app.route('/sighting_data/countries/<country>', methods=['GET'])
@@ -159,19 +154,19 @@ def get_all_regions_by_country(country):
     else:
         return jsonify({'message': 'No sighting data loaded'})
 
-#all above work
-# Get information about a specific region in the sighting data
+# Get information about all sightings for a specific region in the sighting data
 @app.route('/sighting_data/countries/<country>/regions/<region>', methods=['GET'])
 def get_region_info(country, region):
     global sighting_data
     if sighting_data:
-        for c in sighting_data['sighting_data']['country']:
-            if c['@name'] == country:
-                for r in c['region']:
-                    if r['@name'] == region:
-                        return jsonify({'region_info': r})
-                return jsonify({'message': 'Region not found'})
-        return jsonify({'message': 'Country not found'})
+        region_sightings = []
+        for sighting in sighting_data['visible_passes']['visible_pass']:
+            if sighting['country'] == country and sighting['region'] == region:
+                region_sightings.append(sighting)
+        if region_sightings:
+            return jsonify({'region_sightings': region_sightings})
+        else:
+            return jsonify({'message': 'No sightings found for the specified country and region'})
     else:
         return jsonify({'message': 'No sighting data loaded'})
 
@@ -180,34 +175,55 @@ def get_region_info(country, region):
 def get_all_cities_by_country_and_region(country, region):
     global sighting_data
     if sighting_data:
-        for c in sighting_data['sighting_data']['country']:
-            if c['@name'] == country:
-                for r in c['region']:
-                    if r['@name'] == region:
-                        cities = [city['@name'] for city in r['city']]
-                        return jsonify({'cities': cities})
-                return jsonify({'message': 'Region not found'})
-        return jsonify({'message': 'Country not found'})
+        country_and_region_cities = set()
+        country_found = False
+
+        for sighting in sighting_data['visible_passes']['visible_pass']:
+            if sighting['country'] == country:
+                country_found = True
+                if sighting['region'] == region:
+                    country_and_region_cities.add(sighting['city'])
+
+        if country_found:
+            if country_and_region_cities:
+                return jsonify({'cities': list(country_and_region_cities)})
+            else:
+                return jsonify({'message': 'No cities found for the specified country and region'})
+        else:
+            return jsonify({'message': 'Country not found'})
     else:
         return jsonify({'message': 'No sighting data loaded'})
 
-# Get information about a specific city in the sighting data
+#Get all information associated with a given country, region and city
 @app.route('/sighting_data/countries/<country>/regions/<region>/cities/<city>', methods=['GET'])
 def get_city_info(country, region, city):
     global sighting_data
     if sighting_data:
-        for c in sighting_data['sighting_data']['country']:
-            if c['@name'] == country:
-                for r in c['region']:
-                    if r['@name'] == region:
-                        for cy in r['city']:
-                            if cy['@name'] == city:
-                                return jsonify({'city_info': cy})
-                        return jsonify({'message': 'City not found'})
-                return jsonify({'message': 'Region not found'})
-        return jsonify({'message': 'Country not found'})
+        country_found = False
+        region_found = False
+        city_sightings = []
+
+        for sighting in sighting_data['visible_passes']['visible_pass']:
+            if sighting['country'] == country:
+                country_found = True
+                if sighting['region'] == region:
+                    region_found = True
+                    if sighting['city'] == city:
+                        city_sightings.append(sighting)
+
+        if country_found:
+            if region_found:
+                if city_sightings:
+                    return jsonify({'city_sightings': city_sightings})
+                else:
+                    return jsonify({'message': 'No sightings found for the specified city'})
+            else:
+                return jsonify({'message': 'Region not found in the specified country'})
+        else:
+            return jsonify({'message': 'Country not found'})
     else:
         return jsonify({'message': 'No sighting data loaded'})
+
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8000, debug=True)
