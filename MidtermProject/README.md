@@ -10,16 +10,15 @@ The ISS Tracking Flask Application loads two datasets:
 
 The Flask application provides the following routes to interact with the data:
 
-1. **Load Positional Data**: POST `/load_positional_data` - Endpoint to load positional data from a file into memory.
-2. **Load Sighting Data**: POST `/load_sighting_data` - Endpoint to load sighting data from a file into memory.
-3. **Get All Epochs**: GET `/positional_data/epochs` - Retrieve all epochs in the positional data.
-4. **Get Epoch Info**: GET `/positional_data/epochs/<epoch>` - Retrieve information about a specific epoch in the positional data.
-5. **Get All Countries**: GET `/sighting_data/countries` - Retrieve all countries from the sighting data.
-6. **Get Country Info**: GET `/sighting_data/countries/<country>` - Retrieve information about a specific country in the sighting data.
-7. **Get All Regions by Country**: GET `/sighting_data/countries/<country>/regions` - Retrieve all regions associated with a given country in the sighting data.
-8. **Get Region Info**: GET `/sighting_data/countries/<country>/regions/<region>` - Retrieve information about a specific region in the sighting data.
-9. **Get All Cities by Country and Region**: GET `/sighting_data/countries/<country>/regions/<region>/cities` - Retrieve all cities associated with a given country and region in the sighting data.
-10. **Get City Info**: GET `/sighting_data/countries/<country>/regions/<region>/cities/<city>` - Retrieve information about a specific city in the sighting data.
+1. **Load Data**: POST `/load_positional_data` - Endpoint to load positional data and sighting data from a file into memory.
+2. **Get All Epochs**: GET `/positional_data/epochs` - Retrieve all epochs in the positional data.
+3. **Get Epoch Info**: GET `/positional_data/epochs/<epoch>` - Retrieve information about a specific epoch in the positional data.
+4. **Get All Countries**: GET `/sighting_data/countries` - Retrieve all countries from the sighting data.
+5. **Get Country Info**: GET `/sighting_data/countries/<country>` - Retrieve information about a specific country in the sighting data.
+6. **Get All Regions by Country**: GET `/sighting_data/countries/<country>/regions` - Retrieve all regions associated with a given country in the sighting data.
+7. **Get Region Info**: GET `/sighting_data/countries/<country>/regions/<region>` - Retrieve information about a specific region in the sighting data.
+8. **Get All Cities by Country and Region**: GET `/sighting_data/countries/<country>/regions/<region>/cities` - Retrieve all cities associated with a given country and region in the sighting data.
+9. **Get City Info**: GET `/sighting_data/countries/<country>/regions/<region>/cities/<city>` - Retrieve information about a specific city in the sighting data.
 
 ## Requirements
 
@@ -63,3 +62,6 @@ The Makefile provides convenient targets to build the Docker container and start
 For further details, refer to the project documentation and the written document included in the repository.
 
 Enjoy tracking the International Space Station with this Flask application! 🛰🌍
+
+Data Source:
+The positional data for the International Space Station (ISS) was obtained from NASA's Open Data Portal. The specific dataset used can be found at: [ISS_COORDS_2022-02-13](https://data.nasa.gov/Space-Science/ISS_COORDS_2022-02-13/r6u8-bhhq/about_data).

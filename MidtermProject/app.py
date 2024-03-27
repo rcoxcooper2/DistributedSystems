@@ -9,33 +9,22 @@ positional_data = None
 sighting_data = None
 
 
-#To dict
-# Load positional data from XML file
-@app.route('/load_positional_data', methods=['POST'])
-def load_positional_data():
-    global positional_data
+# Load positional and sighting data from XML files
+@app.route('/load_data', methods=['POST'])
+def load_data():
+    global positional_data, sighting_data
     try:
-        with open('positional.xml', 'r') as f:
-            positional_data = xmltodict.parse(f.read())  # Parse XML data
-        app.logger.info('Positional data loaded successfully')
-        return jsonify({'message': 'Positional data loaded successfully'})
+        with open('positional.xml', 'r') as f_pos:
+            positional_data = xmltodict.parse(f_pos.read())  # Parse positional XML data
+            
+        with open('sighting.xml', 'r') as f_sight:
+            sighting_data = xmltodict.parse(f_sight.read())  # Parse sighting XML data
+            
+        app.logger.info('Data loaded successfully')
+        return jsonify({'message': 'Data loaded successfully'})
     except Exception as e:
-        app.logger.error(f'Error loading positional data: {e}')
-        return jsonify({'message': 'Error loading positional data'})
-
-
-# Load sighting data from XML file
-@app.route('/load_sighting_data', methods=['POST'])
-def load_sighting_data():
-    global sighting_data
-    try:
-        with open('sighting.xml', 'r') as f:
-            sighting_data = xmltodict.parse(f.read())  # Read XML data as dict
-        app.logger.info('Sighting data loaded successfully')
-        return jsonify({'message': 'Sighting data loaded successfully'})
-    except Exception as e:
-        app.logger.error(f'Error loading sighting data: {e}')
-        return jsonify({'message': 'Error loading sighting data'})
+        app.logger.error(f'Error loading data: {e}')
+        return jsonify({'message': 'Error loading data'})
 
 # Information on how to interact with the application
 @app.route('/', methods=['GET'])
@@ -103,7 +92,7 @@ def get_country_info(country):
             if sighting['country'] == country:
                 country_sightings.append(sighting)
         if country_sightings:    
-            return jsonify({'country_sightings': country_sightings})
+            return jsonify({f'ISS Sightings in {country}': country_sightings})
         
         else:
             return jsonify({'message': 'Country not found'})
@@ -122,7 +111,7 @@ def get_all_regions_by_country(country):
         if country_regions:
             return jsonify({'regions': list(country_regions)})
         else:
-            return jsonify({'message': 'No regions found for the country'})
+            return jsonify({'message': f'No regions found for {country}'})
     else:
         return jsonify({'message': 'No sighting data loaded'})
 
@@ -136,9 +125,9 @@ def get_region_info(country, region):
             if sighting['country'] == country and sighting['region'] == region:
                 region_sightings.append(sighting)
         if region_sightings:
-            return jsonify({'region_sightings': region_sightings})
+            return jsonify({f'ISS Sightings in {region}, {country}': region_sightings})
         else:
-            return jsonify({'message': 'No sightings found for the specified country and region'})
+            return jsonify({'message': f'No sightings found for {region}, {country}'})
     else:
         return jsonify({'message': 'No sighting data loaded'})
 
@@ -158,7 +147,7 @@ def get_all_cities_by_country_and_region(country, region):
 
         if country_found:
             if country_and_region_cities:
-                return jsonify({'cities': list(country_and_region_cities)})
+                return jsonify({f'List of cities in {region}, {country}': list(country_and_region_cities)})
             else:
                 return jsonify({'message': 'No cities found for the specified country and region'})
         else:
@@ -186,11 +175,11 @@ def get_city_info(country, region, city):
         if country_found:
             if region_found:
                 if city_sightings:
-                    return jsonify({'city_sightings': city_sightings})
+                    return jsonify({f'ISS Sightings in {city}': city_sightings})
                 else:
-                    return jsonify({'message': 'No sightings found for the specified city'})
+                    return jsonify({'message': f'No sightings found in {city}'})
             else:
-                return jsonify({'message': 'Region not found in the specified country'})
+                return jsonify({'message': f'Region not found in the {country}'})
         else:
             return jsonify({'message': 'Country not found'})
     else:
