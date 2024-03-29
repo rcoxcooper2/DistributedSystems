@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import xmltodict
-import xml.etree.ElementTree as ET
+
 
 app = Flask(__name__)
 
