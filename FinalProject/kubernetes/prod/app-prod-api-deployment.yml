@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-prod-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-prod-api
+  template:
+    metadata:
+      labels:
+        app: app-prod-api
+    spec:
+      containers:
+      - name: flask-app
+        image: rcoxcooper2/flask-app:latest
+        ports:
+        - containerPort: 5000

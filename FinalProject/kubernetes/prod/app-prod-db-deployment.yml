@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-prod-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-prod-db
+  template:
+    metadata:
+      labels:
+        app: app-prod-db
+    spec:
+      containers:
+      - name: postgres-db
+        image: postgres:latest
+        env:
+        - name: POSTGRES_DB
+          value: "flask_app_db"
+        - name: POSTGRES_USER
+          value: "flask_app_user"
+        - name: POSTGRES_PASSWORD
+          value: "flask_app_password"
+        ports:
+        - containerPort: 5432

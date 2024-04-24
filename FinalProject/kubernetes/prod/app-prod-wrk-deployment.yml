@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-prod-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-prod-worker
+  template:
+    metadata:
+      labels:
+        app: app-prod-worker
+    spec:
+      containers:
+      - name: worker
+        image: rcoxcooper2/flask-worker:latest
